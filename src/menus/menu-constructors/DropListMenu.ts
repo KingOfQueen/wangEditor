@@ -33,15 +33,12 @@ class DropListMenu extends Menu {
         }
 
         // 初始化 dropList
-        const dropList = new DropList(this, conf)
+        const dropList = new DropList(this, editor, conf)
         this.dropList = dropList
 
         // 绑定事件
         $elem
             .on('mouseenter', () => {
-                if (editor.selection.getRange() == null) {
-                    return
-                }
                 $elem.css('z-index', editor.zIndex.get('menu'))
                 // 触发 droplist 悬浮事件
                 editor.txt.eventHooks.dropListMenuHoverEvents.forEach(fn => fn())

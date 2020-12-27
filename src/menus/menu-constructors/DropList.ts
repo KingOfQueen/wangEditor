@@ -5,6 +5,7 @@
 import $, { DomElement } from '../../utils/dom-core'
 import DropListMenu from './DropListMenu'
 import { EMPTY_FN } from '../../utils/const'
+import Editor from '@/editor'
 
 export type DropListItem = {
     $elem: DomElement
@@ -30,7 +31,7 @@ class DropList {
     public hideTimeoutId: number
     public showTimeoutId: number
 
-    constructor(menu: DropListMenu, conf: DropListConf) {
+    constructor(menu: DropListMenu, editor: Editor, conf: DropListConf) {
         this.hideTimeoutId = 0
         this.showTimeoutId = 0
         this.menu = menu
@@ -61,6 +62,15 @@ class DropList {
                 $li.append($elem)
                 $list.append($li)
                 $li.on('click', () => {
+                    if (editor.selection.getRange() === null) {
+                        // 无选区并且点击菜单时进行创建选区并将其选中
+                        const $last = editor.$textElem.children()?.last()
+                        if ($last) {
+                            editor.selection.createRangeByElem($last, true, true)
+                            editor.selection.restoreSelection()
+                        }
+                    }
+
                     clickHandler(value)
 
                     // item 点击之后，隐藏 list

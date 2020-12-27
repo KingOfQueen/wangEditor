@@ -34,7 +34,12 @@ class Menu {
 
             e.stopPropagation()
             if (editor.selection.getRange() == null) {
-                return
+                // 无选区并且点击菜单时进行创建选区并将其选中
+                const $last = editor.$textElem.children()?.last()
+                if ($last) {
+                    editor.selection.createRangeByElem($last, true, true)
+                    editor.selection.restoreSelection()
+                }
             }
             this.clickHandler(e)
         })
